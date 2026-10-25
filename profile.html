@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bloxyfied | Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="shopnav">
+  <a class="brand" href="home.html"><span class="logo-mark">B<i>x</i></span><span>Bloxyfied</span></a>
+  <nav class="tabs">
+    <a class="tab" href="home.html">🏠 <span>Home</span></a>
+    <a class="tab" href="shop.html">🛍️ <span>Shop</span></a>
+    <a class="tab on" href="profile.html">👤 <span>My Profile</span></a>
+  </nav>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="bxpill" id="balPill" style="display:none"><span class="bxcoin">BX</span><b id="bal">0</b></div>
+    <div class="userchip">
+      <button id="chip"><span class="avatar sm" id="chipAv">?</span><span id="chipName">Guest</span> ▾</button>
+      <div class="menu" id="menu"></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap" id="root">
+  <section class="pcard">
+    <div class="pbanner" id="pBanner"></div>
+    <div class="phead">
+      <div class="avatar xl" id="pAv"></div>
+      <div class="pinfo">
+        <h1 id="pName"></h1>
+        <div id="pTitle" style="color:#c084fc;font-weight:600"></div>
+        <div class="pmeta" id="pMeta"></div>
+      </div>
+      <div id="pAct"></div>
+    </div>
+  </section>
+  <section class="stats" id="stats"></section>
+  <section class="panel"><b>About</b><div id="bio" style="margin-top:8px"></div></section>
+  <section class="panel chat" id="chatPanel" style="display:none"></section>
+  <section class="panel">
+    <div class="tabbar" id="tabbar"></div>
+    <div id="content"></div>
+    <div style="text-align:center;margin-top:16px"><button class="btn outline" id="more" style="display:none">Load more</button></div>
+  </section>
+</div>
+
+<script src="app.js"></script>
+<script>
+(function () {
+  const $ = s => document.querySelector(s);
+  const me = Bx.current();
+  const param = new URLSearchParams(location.search).get('u');
+  const name = param || (me && me.username);
+  if (!name) { location.href = 'index.html?next=profile.html'; return; }
+
+  /* header */
+  if (me) {
+    $('#chipAv').textContent = me.username[0].toUpperCase(); $('#chipAv').setAttribute('style', Bx.avatarStyle(me.username));
+    $('#chipName').innerHTML = Bx.nameHtml(Bx.profile(me.username));
+    $('#balPill').style.display = ''; $('#bal').textContent = Bx.fmt(me.bx);
+    $('#menu').innerHTML = `<div class="who">🪙 ${Bx.fmt(me.bx)} BX</div><a href="profile.html">👤 My Profile</a><a href="home.html">🏠 Home</a><button id="lo">🚪 Log out</button>`;
+    $('#lo').onclick = Bx.logout;
+  } else $('#menu').innerHTML = '<a href="index.html?next=home.html">🔑 Log in</a>';
+  $('#chip').onclick = e => { e.stopPropagation(); $('#menu').classList.toggle('open'); };
+  document.addEventListener('click', () => $('#menu').classList.remove('open'));
+
+  let p = Bx.profile(name);
+  if (!p) {
+    $('#root').innerHTML = '<div class="panel empty"><div style="font-size:3rem">🕵️</div><h2>Player not found</h2><p class="muted">We could not find "' + Bx.esc(name) + '".</p><br><a class="btn primary" href="home.html">Back to Home</a></div>';
+    return;
+  }
+  document.title = 'Bloxyfied | ' + p.username;
+  let tab = 'inv', shown = 24;
+  const PAGE = 24;
+
+  function renderTop() {
+    p = Bx.profile(name);
+    const ban = p.equipped.banner; $('#pBanner').style.background = ban ? ban.value : '';
+    $('#pAv').textContent = p.username[0].toUpperCase(); $('#pAv').setAttribute('style', Bx.avatarStyle(p.username));
+    $('#pName').innerHTML = Bx.nameHtml(p);
+    $('#pTitle').textContent = p.equipped.title ? p.equipped.title.value : '';
+    $('#pMeta').innerHTML = `<span><span class="dot ${p.online ? 'on' : ''}"></span>${p.online ? 'Online' : 'Offline'}</span><span>Level ${p.level}</span>` + (p.plan ? `<span>👑 ${Bx.esc(p.plan.name)}</span>` : '');
+    $('#pAct').innerHTML = p.own ? '<a class="btn primary" href="shop.html#store">🛍️ Get cosmetics</a>' : '<a class="btn outline" href="home.html">← Back to market</a>';
+    const joined = new Date(p.joined).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    const stat = (v, l) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`;
+    $('#stats').innerHTML = stat(p.level, 'Level') + stat(Bx.fmt(p.xp), 'Total XP') + stat(Bx.fmt(p.inventory.length), 'Items owned') + stat(Bx.fmt(p.listings.length), 'Items on sale') + stat(joined, 'Member since') + (p.own ? stat(Bx.fmt(p.bx) + ' BX', 'Balance') : '');
+    if (p.own) {
+      $('#bio').innerHTML = `<textarea class="field textarea" id="bioIn" maxlength="140" placeholder="Write something about yourself (140 characters)">${Bx.esc(p.bio)}</textarea><button class="btn primary sm" id="bioSave">Save</button>`;
+      $('#bioSave').onclick = () => { Bx.setBio($('#bioIn').value); Bx.toast('Bio saved!', 'ok'); };
+    } else $('#bio').innerHTML = p.bio ? Bx.esc(p.bio) : '<span class="muted">This player has not written a bio yet.</span>';
+    const tabs = [['inv', '🎒 Inventory (' + p.inventory.length + ')'], ['list', '🏷️ On sale (' + p.listings.length + ')']];
+    if (p.own) tabs.push(['cust', '🎨 Customize']);
+    $('#tabbar').innerHTML = tabs.map(t => `<button class="fchip ${t[0] === tab ? 'on' : ''}" data-tab="${t[0]}">${t[1]}</button>`).join('');
+  }
+
+  function renderContent() {
+    const ownSet = Bx.ownedIds(); $('#more').style.display = 'none';
+    if (tab === 'cust') {
+      const slots = [['color', '🎨 Name color'], ['banner', '🖼️ Banner'], ['title', '🏷️ Title']];
+      $('#content').innerHTML = '<div class="cust">' + slots.map(([s, label]) => {
+        const owned = Bx.STORE.filter(x => x.type === s && p.cosm.owned.includes(x.id)), cur = p.cosm.equipped[s];
+        return `<h4>${label}</h4><div class="chipbar"><button class="fchip ${!cur ? 'on' : ''}" data-eq="${s}" data-id="">Default</button>` +
+          owned.map(x => `<button class="fchip ${cur === x.id ? 'on' : ''}" data-eq="${s}" data-id="${x.id}">${x.icon} ${Bx.esc(x.name)}</button>`).join('') + '</div>';
+      }).join('') + '<br><p class="muted">Want more? <a class="slink" href="shop.html#store">Visit the Store</a>.</p></div>';
+      return;
+    }
+    const list = tab === 'inv' ? p.inventory : p.listings;
+    const empty = tab === 'inv' ? 'No items yet.' : 'Nothing on sale right now.';
+    $('#content').innerHTML = list.length ? '<div class="items">' + list.slice(0, shown).map(i => Bx.card(i, ownSet, { view: tab === 'inv' })).join('') + '</div>' : '<p class="muted empty">' + empty + '</p>';
+    $('#more').style.display = list.length > shown ? '' : 'none';
+  }
+
+  /* ---------- chat (sample players only) ---------- */
+  const QUICK = ['Hi!', 'Got any rare items?', 'When did you join?', 'Is Dominus Of The Banned real?', 'Is this a scam?'];
+  function initChat() {
+    const panel = $('#chatPanel');
+    if (p.own || !p.seed) return;
+    panel.style.display = '';
+    const me = Bx.current();
+    panel.innerHTML = `<div class="chead"><span class="avatar sm" style="${Bx.avatarStyle(p.username)}">${Bx.esc(p.username[0].toUpperCase())}</span>
+      <div class="grow">💬 Chat with ${Bx.esc(p.username)}<br><small>${p.online ? '● Online' : '○ Offline, but replies anyway'}</small></div>
+      ${me ? '<button class="btn outline sm" id="cClear">Clear</button>' : ''}</div>
+      <div class="cmsgs" id="cMsgs"></div>
+      ${me ? `<div class="cquick">${QUICK.map(q => `<button class="fchip" data-q="${Bx.esc(q)}">${Bx.esc(q)}</button>`).join('')}</div>
+      <div class="cform"><input class="field" id="cIn" maxlength="300" placeholder="Message ${Bx.esc(p.username)}..." autocomplete="off"><button class="btn primary" id="cSend">Send</button></div>`
+      : '<p class="muted">Log in to chat with players. <a class="slink" href="index.html?next=' + encodeURIComponent('profile.html?u=' + p.username) + '">Log in</a></p>'}`;
+    const box = $('#cMsgs');
+    const draw = typing => {
+      const h = me ? Bx.chatHistory(me.username, p.username) : [];
+      box.innerHTML = (h.length ? h.map(m => `<div class="cmsg ${m.f}">${Bx.esc(m.t)}<small>${new Date(m.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small></div>`).join('')
+        : `<div class="cempty">Say hi to ${Bx.esc(p.username)}! Ask about items, prices, when they joined, scams...</div>`) + (typing ? '<div class="cmsg them typing">typing...</div>' : '');
+      box.scrollTop = box.scrollHeight;
+    };
+    draw();
+    if (!me) return;
+    let busy = false;
+    const send = text => {
+      text = String(text).trim(); if (!text || busy) return;
+      let reply; try { reply = Bx.chatSend(me.username, p.username, text); } catch (err) { return Bx.toast(err.message, 'bad'); }
+      $('#cIn').value = ''; busy = true; draw(true);
+      setTimeout(() => { Bx.chatPush(me.username, p.username, 'them', reply); busy = false; draw(); }, 600 + Math.min(1400, reply.length * 12));
+    };
+    $('#cSend').onclick = () => send($('#cIn').value);
+    $('#cIn').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); send($('#cIn').value); } });
+    panel.querySelector('.cquick').addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (b) send(b.dataset.q); });
+    $('#cClear').onclick = () => { Bx.chatClear(me.username, p.username); draw(); };
+  }
+
+  function refresh() { renderTop(); renderContent(); }
+  $('#tabbar').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) { tab = b.dataset.tab; shown = PAGE; refresh(); } });
+  $('#more').onclick = () => { shown += PAGE; renderContent(); };
+  $('#content').addEventListener('click', e => {
+    const b = e.target.closest('[data-eq]'); if (!b) return;
+    try { Bx.equip(b.dataset.eq, b.dataset.id || null); Bx.toast('Profile updated!', 'ok'); } catch (err) { Bx.toast(err.message, 'bad'); }
+    refresh();
+  });
+  Bx.bindItems($('#content'), () => { const m = Bx.current(); if (m) $('#bal').textContent = Bx.fmt(m.bx); refresh(); });
+  refresh(); initChat();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bloxyfied | Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="brand" href="home.html"><span class="logo-mark">B<i>x</i></span><span>Bloxyfied</span></a>
+    <label class="search">🔍 <input id="q" placeholder="Search for items, users, or anything..."></label>
+    <div style="flex:1"></div>
+    <a class="bxpill" href="shop.html" title="Buy Bx"><span class="bxcoin">BX</span><b id="topBal">0</b><span class="plus">＋</span></a>
+    <button class="iconbtn" id="bell" title="Notifications">🔔</button>
+    <div style="position:relative">
+      <button class="iconbtn" id="gear" title="Settings">⚙️</button>
+      <div class="menu" id="menu">
+        <div class="who" id="menuWho"></div>
+        <a href="profile.html">👤 My Profile</a>
+        <a href="shop.html">🛍️ Shop</a>
+        <a href="shop.html#subscribe">👑 Subscription</a>
+        <button id="logoutBtn">🚪 Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <aside class="side">
+    <a class="active" href="home.html">🏠 Home</a>
+    <a href="profile.html">👤 My Profile</a>
+    <button class="nav-i" id="navPlayers">👥 Players</button>
+    <a href="shop.html">🛍️ Shop</a>
+    <button class="nav-i" id="navTrade">🔁 Trading</button>
+    <a href="shop.html#subscribe">👑 Purple Top</a>
+    <hr>
+    <h4>Categories</h4>
+    <button class="nav-i" data-group="Roblox">🧊 Roblox</button>
+    <button class="nav-i" data-group="In-Game">🎮 In-Game</button>
+    <button class="nav-i" data-group="Bloxyfied Products">📦 Bloxyfied Products</button>
+    <hr>
+    <button class="nav-i addp" id="addSide">＋ Add Product</button>
+    <div class="promo">
+      <b>👑 Become a Purple Top</b>
+      <p>Get exclusive benefits, lower fees, and more!</p>
+      <a class="btn primary block sm" href="shop.html#subscribe">Learn More</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="banner" id="banner">
+      <h1 id="bTitle"></h1>
+      <p id="bText"></p>
+      <div><a class="btn primary" id="bBtn" href="#"></a></div>
+      <div class="art" id="bArt">👑</div>
+      <div class="dots" id="dots"></div>
+    </section>
+
+    <section class="cats">
+      <button class="cat" data-group="Roblox"><span class="ic">🧊</span><span><b>Roblox</b><small>Hats, clothing, accessories, gamepasses and more.</small></span></button>
+      <button class="cat" data-group="In-Game"><span class="ic">🎮</span><span><b>In-Game</b><small>Weapons, vehicles, pets, effects and more.</small></span></button>
+      <button class="cat" data-group="Bloxyfied Products"><span class="ic">📦</span><span><b>Bloxyfied Products</b><small>Official merch and bundles from Bloxyfied.</small></span></button>
+    </section>
+
+    <section class="panel" id="market">
+      <div class="sec-h"><span>🔥 <span id="itemsTitle">Marketplace</span></span><a href="#" id="viewAll" class="muted" style="font-size:.9rem">View All →</a></div>
+      <div id="userRes"></div>
+      <div class="toolbar">
+        <div class="chipbar" id="subChips"></div>
+        <select class="sel" id="sort">
+          <option value="featured">Sort: Featured</option>
+          <option value="low">Price: Low to High</option>
+          <option value="high">Price: High to Low</option>
+          <option value="az">Name: A to Z</option>
+        </select>
+      </div>
+      <div class="muted count" id="count"></div>
+      <div class="items" id="items"></div>
+      <div style="text-align:center;margin-top:18px"><button class="btn outline" id="more">Load more items</button></div>
+    </section>
+
+    <section class="panel cta">
+      <div style="font-size:3rem">📦</div>
+      <div class="grow"><b style="font-size:1.3rem">Add Product</b><p class="muted" style="font-size:.85rem;margin:4px 0 12px">Sell your items to users and grow your inventory.</p>
+        <button class="btn primary" id="addBtn">Add Product →</button></div>
+      <div class="perk"><b>⚡</b>Fast Listing<small>Get your item listed quickly.</small></div>
+      <div class="perk"><b>🛡️</b>Safe &amp; Secure<small>Trade with confidence.</small></div>
+      <div class="perk"><b>👥</b>Reach More Buyers<small>Active users, one place.</small></div>
+    </section>
+  </main>
+
+  <aside class="right">
+    <section class="panel">
+      <div class="prof">
+        <a class="avatar" id="pAvatar" href="profile.html"></a>
+        <div style="flex:1;min-width:0">
+          <a href="profile.html" id="pName" style="font-size:1.05rem;font-weight:700"></a>
+          <div class="muted" style="font-size:.8rem" id="pLevel"></div>
+          <div class="xp"><i id="pXp"></i></div>
+          <div class="muted" style="font-size:.72rem;text-align:center" id="pXpTxt"></div>
+        </div>
+      </div>
+      <div class="balbox"><span class="bxcoin">BX</span><div><b id="pBal">0</b><small class="muted">BX Balance</small></div><a class="plus" href="shop.html">＋</a></div>
+      <div class="muted" style="font-size:.8rem;margin-top:10px" id="pExtra"></div>
+      <a class="btn outline block sm" href="profile.html" style="margin-top:12px">View my profile</a>
+    </section>
+
+    <section class="panel">
+      <div class="ph"><span><span class="live"></span>Users Online</span><span id="onlineCount">1,248</span></div>
+      <div id="online"></div>
+    </section>
+
+    <section class="panel">
+      <div class="ph"><span>🛒 Items Sold</span><span id="soldCount">12,493</span></div>
+      <div id="sold"></div>
+    </section>
+  </aside>
+</div>
+
+<script src="app.js"></script>
+<script>
+(function () {
+  const me0 = Bx.requireAuth(); if (!me0) return;
+  const $ = s => document.querySelector(s);
+  const PAGE = 48;
+  let group = 'All', cat = 'All', q = '', sort = 'featured', shown = PAGE, hv = false;
+
+  /* ---------- header + profile card ---------- */
+  function refreshUser() {
+    const me = Bx.current(), p = Bx.profile(me.username);
+    $('#topBal').textContent = Bx.fmt(me.bx);
+    $('#pBal').textContent = Bx.fmt(me.bx);
+    $('#pAvatar').textContent = me.username[0].toUpperCase(); $('#pAvatar').setAttribute('style', Bx.avatarStyle(me.username));
+    $('#pName').innerHTML = Bx.nameHtml(p);
+    $('#pLevel').textContent = 'Level ' + Bx.level(me.xp);
+    $('#pXp').style.width = (me.xp % 1000) / 10 + '%';
+    $('#pXpTxt').textContent = Bx.fmt(me.xp % 1000) + ' / 1,000 XP';
+    const pl = Bx.activePlan(me);
+    $('#pExtra').innerHTML = (pl ? '👑 ' + Bx.esc(pl.name) + ' · ' : '') + '🎒 Items owned: ' + me.inventory.length;
+    $('#menuWho').textContent = 'Signed in as ' + me.username;
+    return me;
+  }
+
+  /* ---------- marketplace ---------- */
+  const allItems = () => [...Bx.listings(), ...Bx.CATALOG];
+  function filtered() {
+    let list = allItems().filter(i => (group === 'All' || i.group === group) && (cat === 'All' || i.cat === cat) && (!hv || i.price >= 100000) &&
+      (!q || i.name.toLowerCase().includes(q) || i.cat.toLowerCase().includes(q) || (i.seller || '').toLowerCase().includes(q)));
+    if (sort === 'low') list = list.slice().sort((a, b) => a.price - b.price);
+    else if (sort === 'high') list = list.slice().sort((a, b) => b.price - a.price);
+    else if (sort === 'az') list = list.slice().sort((a, b) => a.name.localeCompare(b.name));
+    return list;
+  }
+  function render() {
+    const own = Bx.ownedIds(), list = filtered();
+    $('#itemsTitle').textContent = (group === 'All' ? 'Marketplace' : group) + ' · ' + Bx.fmt(allItems().length) + ' items on sale';
+    $('#count').textContent = Bx.fmt(list.length) + ' items' + (q ? ' matching "' + q + '"' : '') + ' · showing ' + Bx.fmt(Math.min(shown, list.length));
+    $('#items').innerHTML = list.length ? list.slice(0, shown).map(i => Bx.card(i, own)).join('') : '<p class="muted empty">No items found.</p>';
+    $('#more').style.display = list.length > shown ? '' : 'none';
+    const subs = Bx.CATS_META.filter(c => group === 'All' || c.group === group);
+    $('#subChips').innerHTML = ['All', ...subs.map(c => c.cat)].map(c => `<button class="fchip ${c === cat ? 'on' : ''}" data-sub="${Bx.esc(c)}">${Bx.esc(c)}</button>`).join('') +
+      `<button class="fchip ${hv ? 'on' : ''}" data-hv="1">💎 High Value (100k+)</button>`;
+    document.querySelectorAll('[data-group]').forEach(b => b.classList.toggle('on', b.dataset.group === group));
+    const people = q.length >= 2 ? Bx.allPlayers().filter(n => n.toLowerCase().includes(q)).slice(0, 8) : [];
+    $('#userRes').innerHTML = people.length ? '<div class="muted count">Users</div><div class="userstrip">' + people.map(n =>
+      `<a class="ulink" href="${Bx.profileUrl(n)}"><span class="avatar sm" style="${Bx.avatarStyle(n)}">${Bx.esc(n[0].toUpperCase())}</span>${Bx.nameOf(n)}</a>`).join('') + '</div>' : '';
+  }
+  const reset = () => { shown = PAGE; render(); };
+  const afterBuy = () => { refreshUser(); renderSold(); render(); };
+  Bx.bindItems($('#items'), afterBuy);
+
+  $('#subChips').addEventListener('click', e => {
+    if (e.target.closest('[data-hv]')) { hv = !hv; if (hv) sort = 'high', $('#sort').value = 'high'; reset(); return; }
+    const b = e.target.closest('[data-sub]'); if (b) { cat = b.dataset.sub; reset(); }
+  });
+  document.querySelectorAll('[data-group]').forEach(b => b.onclick = () => {
+    group = group === b.dataset.group ? 'All' : b.dataset.group; cat = 'All'; reset(); $('#market').scrollIntoView({ behavior: 'smooth' });
+  });
+  $('#viewAll').onclick = e => { e.preventDefault(); group = 'All'; cat = 'All'; q = ''; $('#q').value = ''; reset(); };
+  $('#q').addEventListener('input', e => { q = e.target.value.trim().toLowerCase(); reset(); });
+  $('#sort').onchange = e => { sort = e.target.value; reset(); };
+  $('#more').onclick = () => { shown += PAGE; render(); };
+
+  /* ---------- add product ---------- */
+  function openAdd() {
+    const opts = Bx.GROUPS.map(g => `<optgroup label="${g}">` + Bx.CATS_META.filter(c => c.group === g).map(c => `<option>${c.cat}</option>`).join('') + '</optgroup>').join('');
+    const m = Bx.modal(`<h3>📦 Add Product</h3><p>List an item for other users to buy with Bx.</p>
+      <input class="field" id="apName" placeholder="Item name" maxlength="30">
+      <select class="field" id="apCat">${opts}</select>
+      <input class="field" id="apPrice" type="number" min="1" max="100000000" placeholder="Price in BX">
+      <input class="field" id="apStock" type="number" min="1" max="999" placeholder="Stock (how many you have, default 1)">
+      <div class="err" id="apErr"></div>
+      <div class="row"><button class="btn outline" id="apNo">Cancel</button><button class="btn primary" id="apOk">List item</button></div>`);
+    m.el.querySelector('#apNo').onclick = m.close;
+    m.el.querySelector('#apOk').onclick = () => {
+      const name = m.el.querySelector('#apName').value.trim(), price = Math.floor(+m.el.querySelector('#apPrice').value);
+      if (name.length < 2) return m.el.querySelector('#apErr').textContent = 'Give your item a name.';
+      if (!(price >= 1)) return m.el.querySelector('#apErr').textContent = 'Enter a price of at least 1 BX.';
+      Bx.addListing({ name, cat: m.el.querySelector('#apCat').value, price, stock: +m.el.querySelector('#apStock').value || 1 });
+      m.close(); Bx.toast('Item listed!', 'ok'); render();
+    };
+  }
+  $('#addBtn').onclick = $('#addSide').onclick = openAdd;
+
+  /* ---------- players list ---------- */
+  $('#navPlayers').onclick = () => {
+    const m = Bx.modal(`<h3>👥 Players</h3><input class="field" id="pq" placeholder="Search players..."><div id="plist"></div>
+      <div class="row"><button class="btn primary" id="pc">Close</button></div>`);
+    const draw = () => {
+      const f = m.el.querySelector('#pq').value.trim().toLowerCase();
+      const list = Bx.allPlayers().filter(n => n.toLowerCase().includes(f)).slice(0, 50);
+      m.el.querySelector('#plist').innerHTML = list.map(n => `<a class="urow" href="${Bx.profileUrl(n)}"><span class="avatar sm" style="${Bx.avatarStyle(n)}">${Bx.esc(n[0].toUpperCase())}</span><div class="info">${Bx.nameOf(n)}</div></a>`).join('') || '<p class="muted">No players found.</p>';
+    };
+    m.el.querySelector('#pq').oninput = draw; m.el.querySelector('#pc').onclick = m.close; draw();
+  };
+
+  /* ---------- right column ---------- */
+  const ACTS = ['Trading', 'Browsing', 'In-Game', 'Browsing', 'Trading'];
+  function renderOnline() {
+    const me = Bx.current();
+    const names = [me.username, ...Bx.randomPlayers(4)];
+    $('#online').innerHTML = names.map((n, i) => `<a class="urow" href="${Bx.profileUrl(n)}"><span class="avatar sm" style="${Bx.avatarStyle(n)}">${Bx.esc(n[0].toUpperCase())}</span>
+      <div class="info">${Bx.nameOf(n)}${i === 0 ? ' <span class="muted">(you)</span>' : ''}<small>● Online</small></div><span class="act">${ACTS[i]}</span></a>`).join('');
+  }
+  const SEED_SALES = [['👑', 'Purple Crown', 1250, '2m ago'], ['🗡️', 'Dark Blade', 850, '5m ago'], ['🎩', 'Red Valk', 1800, '8m ago'], ['🚗', 'Speedy Car', 1200, '12m ago'], ['🧥', 'Classic Hoodie', 600, '15m ago']];
+  function renderSold() {
+    const real = Bx.sales().map(s => [s.icon, s.name, s.price, Bx.ago(s.at)]);
+    $('#soldCount').textContent = Bx.fmt(12493 + real.length);
+    $('#sold').innerHTML = [...real, ...SEED_SALES].slice(0, 5).map(s => `<div class="srow"><div class="th">${s[0]}</div>
+      <div class="info"><b>${Bx.esc(s[1])}</b><small>Sold for ${Bx.fmt(s[2])} BX</small></div><span class="muted">${s[3]}</span></div>`).join('');
+  }
+
+  /* ---------- banner carousel ---------- */
+  const SLIDES = [
+    { t: 'Trade<br>Buy. Sell.<br><em>Get More.</em>', p: 'Over 3,700 items: hats, weapons, pets, vehicles and exclusive Bloxyfied products, all in one place.', b: 'Start Shopping →', art: '👑', fn: () => $('#market').scrollIntoView({ behavior: 'smooth' }) },
+    { t: 'Go Purple.<br><em>Earn daily Bx.</em>', p: 'Subscribe to Purple Basic, Premium or Overlord and get Bx every day plus an exclusive badge.', b: 'See plans →', art: '💎', href: 'shop.html#subscribe' },
+    { t: 'Stand out.<br><em>Customize.</em>', p: 'Get name colors, banners, titles and loot crates in the Bloxyfied Store and show them off on your profile.', b: 'Open the Store →', art: '🎁', href: 'shop.html#store' }
+  ];
+  let si = 0, timer;
+  function showSlide(i) {
+    si = i; const s = SLIDES[i];
+    $('#bTitle').innerHTML = s.t; $('#bText').textContent = s.p; $('#bBtn').textContent = s.b; $('#bArt').textContent = s.art;
+    $('#bBtn').href = s.href || '#'; $('#bBtn').onclick = s.fn ? (e => { e.preventDefault(); s.fn(); }) : null;
+    $('#dots').innerHTML = SLIDES.map((_, k) => `<i class="${k === i ? 'on' : ''}" data-i="${k}"></i>`).join('');
+  }
+  $('#dots').addEventListener('click', e => { if (e.target.dataset.i) { showSlide(+e.target.dataset.i); restart(); } });
+  const restart = () => { clearInterval(timer); timer = setInterval(() => showSlide((si + 1) % SLIDES.length), 6000); };
+
+  /* ---------- misc ---------- */
+  $('#navTrade').onclick = () => Bx.toast('Player-to-player trading is coming soon.');
+  $('#bell').onclick = () => Bx.toast('You have no new notifications.');
+  $('#gear').onclick = e => { e.stopPropagation(); $('#menu').classList.toggle('open'); };
+  document.addEventListener('click', () => $('#menu').classList.remove('open'));
+  $('#logoutBtn').onclick = Bx.logout;
+
+  refreshUser(); render(); renderOnline(); renderSold(); showSlide(0); restart();
+  if (!sessionStorage.getItem('bx_welcomed')) {
+    sessionStorage.setItem('bx_welcomed', '1'); Bx.toast('Welcome back, ' + me0.username + '!', 'ok');
+  }
+})();
+</script>
+</body>
+</html>

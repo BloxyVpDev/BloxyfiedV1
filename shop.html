@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bloxyfied | Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="shopnav">
+  <a class="brand" href="home.html"><span class="logo-mark">B<i>x</i></span><span>Bloxyfied</span></a>
+  <nav class="tabs">
+    <a class="tab" href="home.html">🏠 <span>Home</span></a>
+    <a class="tab on" href="#subscribe" id="tabSub">👑 <span>Subscription</span></a>
+    <a class="tab" href="#store">🛍️ <span>Store</span></a>
+    <a class="tab" href="profile.html">👤 <span>Profile</span></a>
+  </nav>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="bxpill" id="balPill" style="display:none"><span class="bxcoin">BX</span><b id="bal">0</b></div>
+    <div class="userchip">
+      <button id="chip"><span class="avatar sm" id="chipAv">?</span><span id="chipName">Guest</span> ▾</button>
+      <div class="menu" id="menu"></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="welcome">
+    <h2>Welcome to</h2>
+    <h1>Bloxyfied</h1>
+    <p>Get more Bx, unlock exclusive badges, and make your profile stand out with colors, banners and titles!</p>
+    <div class="big">💎</div>
+    <div class="slogan">More Bx,<br>More Fun,<br>More You!</div>
+  </section>
+
+  <section class="shop-sec" id="currency">
+    <h3>🪙 Buy Currency</h3>
+    <p>Get Bx and unlock more in Bloxyfied!</p>
+    <div class="packs" id="packs"></div>
+  </section>
+
+  <section class="shop-sec" id="subscribe">
+    <h3>👑 Subscribe</h3>
+    <p>Choose your plan and get exclusive benefits!</p>
+    <div class="plans" id="plans"></div>
+  </section>
+
+  <section class="shop-sec" id="store">
+    <h3>🛍️ Bloxyfied Store</h3>
+    <p>Spend your Bx on cosmetics, loot crates and boosters.</p>
+    <div class="stabs" id="stabs"></div>
+    <div class="sgrid" id="sgrid"></div>
+  </section>
+
+  <section class="assure">
+    <div><span>⚡</span><span><b>Instant Delivery</b><small>Get your Bx right away</small></span></div>
+    <div><span>🛡️</span><span><b>Secure Accounts</b><small>Hashed passwords</small></span></div>
+    <div><span>💬</span><span><b>Exclusive Badges</b><small>Show your style</small></span></div>
+    <div><span>👑</span><span><b>Premium Experience</b><small>For true Bloxyfied players</small></span></div>
+  </section>
+</div>
+
+<script src="app.js"></script>
+<script>
+(function () {
+  const $ = s => document.querySelector(s);
+  let me = Bx.current(), tab = 'color';
+
+  /* ---------- header ---------- */
+  function renderChip() {
+    me = Bx.current();
+    if (me) {
+      $('#chipAv').textContent = me.username[0].toUpperCase(); $('#chipAv').setAttribute('style', Bx.avatarStyle(me.username));
+      $('#chipName').innerHTML = Bx.nameHtml(Bx.profile(me.username));
+      $('#balPill').style.display = ''; $('#bal').textContent = Bx.fmt(me.bx);
+      $('#menu').innerHTML = `<div class="who">🪙 ${Bx.fmt(me.bx)} BX</div><a href="profile.html">👤 My Profile</a><a href="home.html">🏠 Home</a><button id="lo">🚪 Log out</button>`;
+      $('#lo').onclick = Bx.logout;
+    } else {
+      $('#menu').innerHTML = '<a href="index.html?next=shop.html">🔑 Log in</a><a href="index.html?next=shop.html">✨ Create account</a>';
+    }
+  }
+  $('#chip').onclick = e => { e.stopPropagation(); $('#menu').classList.toggle('open'); };
+  document.addEventListener('click', () => $('#menu').classList.remove('open'));
+  function needLogin() { Bx.toast('Please log in to continue.', 'bad'); setTimeout(() => location.href = 'index.html?next=shop.html', 1000); }
+
+  /* ---------- currency packs (instant, no payment) ---------- */
+  const PACKS = [{ bx: 500, price: 1, n: 1 }, { bx: 1000, price: 10, n: 3 }, { bx: 1500, price: 15, n: 5 }, { bx: 5000, price: 30, n: 8 }, { bx: 10000, price: 50, n: 8 }, { bx: 25000, price: 100, n: 8 }];
+  $('#packs').innerHTML = PACKS.map((p, i) => `<div class="pack">
+      <div class="coins" style="font-size:${28 + p.n * 4}px">${'🪙'.repeat(Math.min(p.n, 4))}</div>
+      <b>${Bx.fmt(p.bx)} Bx</b>
+      <div class="pp"><span class="bxcoin">BX</span>$${p.price}</div>
+      <button class="btn primary block" data-pack="${i}">🛒 Buy Now</button></div>`).join('');
+  $('#packs').addEventListener('click', e => {
+    const b = e.target.closest('[data-pack]'); if (!b) return;
+    if (!me) return needLogin();
+    const p = PACKS[+b.dataset.pack];
+    Bx.addBx(p.bx); Bx.toast('+' + Bx.fmt(p.bx) + ' Bx added to your balance!', 'ok'); renderChip(); renderStore();
+  });
+
+  /* ---------- subscriptions (instant) ---------- */
+  const PERKS = {
+    basic: ['10 Bx per day', 'Purple Basic Badge', '(Little check in the name)', 'Special chat effect'],
+    premium: ['50 Bx per day', 'Purple Premium badge', '(Little golden check in the name)', 'Premium glowing chat effect'],
+    overlord: ['150 Bx per day', 'Purple Overlord badge', '(Flaming red check in the name)', 'Overlord Premium flaming golden purple chat effect']
+  };
+  const ICON = { basic: '🛡️', premium: '🏅', overlord: '🔥' };
+  function renderPlans() {
+    me = Bx.current(); const active = Bx.activePlan(me);
+    const html = Object.values(Bx.PLANS).map(p => {
+      const cur = active && active.key === p.key, pk = PERKS[p.key];
+      return `<div class="plan" style="--c:${p.color}">
+        <header><span>${p.name}</span><span class="shield">${ICON[p.key]}</span></header>
+        <span class="price">$${p.price} / ${p.per}</span>
+        <ul><li>🪙 <b>${pk[0]}</b></li><li>✅ ${pk[1]}<small>${pk[2]}</small></li><li>💬 ${pk[3]}</li></ul>
+        <button class="btn primary block" data-plan="${p.key}" ${cur ? 'disabled' : ''}>${cur ? '✔ Current plan' : '👑 Subscribe'}</button></div>`;
+    }).join('');
+    const used = me && me.trialUsed;
+    $('#plans').innerHTML = html + `<div class="plan trial"><div class="gift">🎁</div><b style="font-size:1.5rem">Free Trial</b>
+      <p class="muted" style="font-size:.9rem">Try Purple Premium free for 3 days.<br>No commitment!</p>
+      <button class="btn primary block" id="trialBtn" ${used ? 'disabled' : ''}>${used ? 'Trial used' : 'Start Free Trial ›'}</button></div>`;
+  }
+  $('#plans').addEventListener('click', e => {
+    const b = e.target.closest('[data-plan]');
+    if (b) {
+      if (!me) return needLogin();
+      const p = Bx.PLANS[b.dataset.plan]; Bx.subscribe(p.key);
+      Bx.toast(p.name + ' activated! Your first daily Bx is in.', 'ok'); renderChip(); renderPlans(); return;
+    }
+    if (e.target.closest('#trialBtn')) {
+      if (!me) return needLogin();
+      try { Bx.subscribe('premium', true); Bx.toast('Free trial started! Enjoy Purple Premium for 3 days.', 'ok'); renderChip(); renderPlans(); }
+      catch (err) { Bx.toast(err.message, 'bad'); }
+    }
+  });
+
+  /* ---------- store ---------- */
+  const TABS = [['color', '🎨 Name Colors'], ['banner', '🖼️ Banners'], ['title', '🏷️ Titles'], ['crate', '🎁 Loot Crates'], ['boost', '⚡ Boosters']];
+  const SLOT = { color: 'color', banner: 'banner', title: 'title' };
+  function preview(s) {
+    if (s.type === 'color') return `<span class="${s.value === 'rainbow' ? 'rainbow' : ''}" style="${s.value === 'rainbow' ? '' : 'color:' + s.value};font-size:1.3rem">Username</span>`;
+    if (s.type === 'banner') return `<div style="width:100%;height:100%;background:${s.value}"></div>`;
+    if (s.type === 'title') return `<span style="font-size:1.1rem;color:#c084fc">${Bx.esc(s.value)}</span>`;
+    return s.icon;
+  }
+  function desc(s) {
+    if (s.type === 'crate') return 'Odds: ' + Object.entries(s.value).map(([t, p]) => t + ' ' + Math.round(p * 100) + '%').join(' · ');
+    if (s.type === 'boost') return '+' + Bx.fmt(s.value) + ' XP instantly';
+    return { color: 'Changes your username color', banner: 'Shown on top of your profile', title: 'Shown under your name' }[s.type];
+  }
+  function renderStore() {
+    me = Bx.current();
+    $('#stabs').innerHTML = TABS.map(t => `<button class="fchip ${t[0] === tab ? 'on' : ''}" data-tab="${t[0]}">${t[1]}</button>`).join('');
+    const own = me ? me.cosm.owned : [], eq = me ? me.cosm.equipped : {};
+    $('#sgrid').innerHTML = Bx.STORE.filter(s => s.type === tab).map(s => {
+      let btn;
+      if (SLOT[s.type] && own.includes(s.id)) btn = eq[SLOT[s.type]] === s.id
+        ? `<button class="btn outline block sm" data-unequip="${SLOT[s.type]}">✔ Equipped</button>`
+        : `<button class="btn primary block sm" data-equip="${s.id}">Equip</button>`;
+      else btn = `<button class="btn primary block sm" data-store="${s.id}">${s.type === 'crate' ? 'Open' : 'Buy'}</button>`;
+      return `<div class="scard"><div class="sprev">${preview(s)}</div><b>${Bx.esc(s.name)}</b><small>${desc(s)}</small>
+        <div class="pr"><span class="bxcoin">BX</span>${Bx.fmt(s.price)} BX</div>${btn}</div>`;
+    }).join('');
+  }
+  $('#stabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) { tab = b.dataset.tab; renderStore(); } });
+  $('#sgrid').addEventListener('click', e => {
+    const buy = e.target.closest('[data-store]'), eqb = e.target.closest('[data-equip]'), un = e.target.closest('[data-unequip]');
+    if (!buy && !eqb && !un) return;
+    if (!me) return needLogin();
+    try {
+      if (eqb) { const s = Bx.STORE_BY_ID[eqb.dataset.equip]; Bx.equip(SLOT[s.type], s.id); Bx.toast(s.name + ' equipped!', 'ok'); }
+      else if (un) { Bx.equip(un.dataset.unequip, null); Bx.toast('Unequipped.'); }
+      else {
+        const s = Bx.STORE_BY_ID[buy.dataset.store], r = Bx.buyStore(s.id);
+        if (r.item) {
+          const m = Bx.modal(`<h3 style="text-align:center">🎉 You got...</h3><div class="bigicon">${r.item.icon}</div>
+            <h3 style="text-align:center">${Bx.esc(r.item.name)}</h3><div style="text-align:center"><span class="chip inl ${Bx.esc(r.item.tag)}">${Bx.esc(r.item.tag)}</span></div>
+            <p style="text-align:center;margin-top:10px">Worth ${Bx.fmt(r.item.price)} BX. It's in your inventory.</p>
+            <div class="row"><button class="btn primary" id="ok">Awesome!</button></div>`);
+          m.el.querySelector('#ok').onclick = m.close;
+        } else if (s.type === 'boost') Bx.toast('+' + Bx.fmt(s.value) + ' XP!', 'ok');
+        else Bx.toast(s.name + ' bought! Press Equip to use it.', 'ok');
+      }
+    } catch (err) {
+      if (err.message === 'NOT_ENOUGH') Bx.toast('Not enough BX. Buy some in "Buy Currency" above.', 'bad'); else Bx.toast(err.message, 'bad');
+    }
+    renderChip(); renderStore();
+  });
+
+  renderChip(); renderPlans(); renderStore();
+})();
+</script>
+</body>
+</html>
